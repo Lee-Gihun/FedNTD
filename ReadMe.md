@@ -4,7 +4,7 @@ This repository is the official PyTorch implementation of [**"Preservation of Gl
 
 <img src="./image/fedntd.png" width="1200"/>
 
-Our code structure is based on [FedML](https://doc.fedml.ai/), but largely refactored for the simplicity.
+Our code structure is based on [FedML](https://doc.fedml.ai/) but refactored for simplicity.
 
 We also implemented various FL algorithms in our framework: 
 - FedCurv, FedAvgM, Scaffold, Fedprox, MOON, FedNova, and FedDyn.
