@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-__all__ = ["resnet10", "resnet18", "resnet34", "resnet50"]
+__all__ = ["resnet10", "resnet18", "resnet34"]
 
 
 class BasicBlock(nn.Module):

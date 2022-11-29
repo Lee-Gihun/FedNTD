@@ -39,7 +39,6 @@ def data_distributer(
     batch_size,
     n_clients,
     partition,
-    cutout=False,
     oracle_size=0,
     oracle_batch_size=None,
 ):
@@ -82,7 +81,7 @@ def data_distributer(
     for client_idx, dataidxs in net_dataidx_map.items():
         local_loaders[client_idx]["datasize"] = len(dataidxs)
         local_loaders[client_idx]["train"] = DATA_LOADERS[dataset_name](
-            root, train=True, batch_size=batch_size, dataidxs=dataidxs, cutout=cutout,
+            root, train=True, batch_size=batch_size, dataidxs=dataidxs,
         )
 
     print(">>> Distributing client test data...")
@@ -93,7 +92,6 @@ def data_distributer(
                 train=False,
                 batch_size=batch_size,
                 dataidxs=dataidxs,
-                cutout=cutout,
             )
             local_loaders[client_idx]["test"] = local_testloader
             local_loaders[client_idx]["dist"] = get_dist_vec(
@@ -102,7 +100,7 @@ def data_distributer(
 
     global_loaders = {
         "train": DATA_LOADERS[dataset_name](
-            root, train=True, batch_size=batch_size, cutout=cutout
+            root, train=True, batch_size=batch_size
         ),
         "test": DATA_LOADERS[dataset_name](root, train=False, batch_size=batch_size),
     }

@@ -38,15 +38,18 @@ class ClientTrainer(BaseClientTrainer):
             for data, targets in self.trainloader:
                 data, targets = data.to(self.device), targets.to(self.device)
 
-                # Local model & Global model prediction
+                # Local model & Global model output
                 logits, dg_logits = self.model(data), self._get_dg_logits(data)
 
-                # Get the global model prediction
+                # Local model probability prediction
+                pred_probs = F.log_softmax(logits / self.tau, dim=1)
+
+                # Global model probability prediction
                 with torch.no_grad():
                     dg_probs = torch.softmax(dg_logits / self.tau, dim=1)
 
-                # Distillation Loss
-                pred_probs = F.log_softmax(logits / self.tau, dim=1)
+                # CE + KD Loss
+                loss = self.criterion(logits, targets)
                 kd_loss = self.beta * (self.tau ** 2) * self.KLDiv(pred_probs, dg_probs)
                 loss += kd_loss
 
