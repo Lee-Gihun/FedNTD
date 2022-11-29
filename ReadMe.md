@@ -1,6 +1,8 @@
 # FedNTD (Federated Not-True Distillation)
 
-This repository is the official PyTorch implementation of [**"Preservation of Global Knowledge by Not-True Distillation in Federated Learning (NeurIPS 2022)"**](https://openreview.net/forum?id=qw3MZb1Juo).
+This repository is the official PyTorch implementation of:
+
+[**"Preservation of Global Knowledge by Not-True Distillation in Federated Learning (NeurIPS 2022)"**](https://arxiv.org/abs/2106.03097).
 
 <img src="./assets/fedntd.png" width="1200"/>
 
