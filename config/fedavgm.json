@@ -1,0 +1,42 @@
+{
+    "data_setups":{
+        "root": "./data",
+        "dataset_name": "cifar10",
+        "batch_size": 50,
+        "n_clients": 100,
+        "partition": {
+            "method": "sharding",
+            "shard_per_user": 2
+        }
+    },
+    "train_setups":{
+        "algo": {
+            "name": "fedavgm",
+            "params": {"avgm_beta": 0.7}
+        },
+        "scenario": {
+            "n_rounds": 200,
+            "sample_ratio": 0.1,
+            "local_epochs": 5,
+            "device": "cuda:0"
+        },
+        "model":{
+            "name": "fedavg_cifar",
+            "params": {}
+        },
+        "optimizer":{
+            "params": {"lr": 0.01, "momentum":0.9, "weight_decay": 1e-5}
+        },
+        "scheduler":{
+            "enabled": true,
+            "name": "step",
+            "params": {"gamma":0.99, "step_size": 1}
+        },
+        "seed": 2022
+    },
+    "wandb_setups":{
+        "project": "NeurIPS2022",
+        "group": "fedavgm",
+        "name": "fedavgm"
+    }
+}
