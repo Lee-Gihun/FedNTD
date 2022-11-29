@@ -8,8 +8,8 @@ This repository is the official PyTorch implementation of:
 
 Our code structure is based on [FedML](https://doc.fedml.ai/) but refactored for simplicity.
 
-We also implemented various FL algorithms in our framework: 
-- FedCurv, FedAvgM, Scaffold, Fedprox, MOON, FedNova, and FedDyn.
+We implemented various FL algorithms in our framework: 
+- **FedCurv**, **FedAvgM**, **Scaffold**, **Fedprox**, **MOON**, **FedNova**, **FedDyn** and **FedNTD (Ours)**.
 
 ## Requirements
 
