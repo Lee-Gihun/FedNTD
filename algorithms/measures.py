@@ -6,7 +6,8 @@ __all__ = ["evaluate_model", "evaluate_model_classwise", "get_round_personalized
 
 
 @torch.no_grad()
-def evaluate_model(model, dataloader, device="cuda:1"):
+def evaluate_model(model, dataloader, device="cuda:0"):
+    """Evaluate model accuracy for the given dataloader"""
     model.eval()
     model.to(device)
 
@@ -29,8 +30,9 @@ def evaluate_model(model, dataloader, device="cuda:1"):
 
 @torch.no_grad()
 def evaluate_model_classwise(
-    model, dataloader, num_classes=10, device="cuda:1",
+    model, dataloader, num_classes=10, device="cuda:0",
 ):
+    """Evaluate class-wise accuracy for the given dataloader."""
 
     model.eval()
     model.to(device)
@@ -55,21 +57,10 @@ def evaluate_model_classwise(
     return classwise_accuracy.cpu(), accuracy
 
 
-# @torch.no_grad()
-# def get_overall_personalized_acc(finetune_results, data_distributed):
-#     n_clients = len(data_distributed["local"].keys())
-#     clients_all = [x for x in range(n_clients)]
-#     local_dist_list = sampled_clients_identifier(data_distributed, clients_all)
-
-#     result_dict = {}
-
-#     for finetune_idx in range(5):
-#         for local_cwa, local_dist_vec in zip(local_cwa_list, local_dist_list):
-#         local_cwa_list = finetune_results["classwise_accuracy_%d" % finetune_idx]
-
-
 @torch.no_grad()
 def get_round_personalized_acc(round_results, server_results, data_distributed):
+    """Evaluate personalized FL performance on the sampled clients."""
+    
     sampled_clients = server_results["client_history"][-1]
     local_dist_list, local_size_list = sampled_clients_identifier(
         data_distributed, sampled_clients
@@ -106,6 +97,7 @@ def get_round_personalized_acc(round_results, server_results, data_distributed):
 
 @torch.no_grad()
 def calculate_inverse_dist(dist_vec):
+    """Get the out-local distribution"""
     inverse_dist_vec = (1 - dist_vec) / (dist_vec.nelement() - 1)
 
     return inverse_dist_vec

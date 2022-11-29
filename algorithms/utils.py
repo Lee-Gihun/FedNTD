@@ -9,6 +9,7 @@ __all__ = [
 
 
 def sampled_clients_identifier(data_distributed, sampled_clients):
+    """Identify local datasets information (distribution, size)"""
     local_dist_list, local_size_list = [], []
 
     for client_idx in sampled_clients:
@@ -23,6 +24,8 @@ def sampled_clients_identifier(data_distributed, sampled_clients):
 
 
 def tensor_concater(tensor1, tensor2, device=None):
+    """Concatenate two tensors"""
+    
     if tensor1 is None:
         tensor1 = tensor2
 
@@ -37,7 +40,7 @@ def tensor_concater(tensor1, tensor2, device=None):
 
 
 def dict_concater(dict1, dict2):
-
+    """Concatenate two dictionaries"""
     for key, item in dict2.items():
         dict1[key] = item
 
