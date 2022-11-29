@@ -13,6 +13,7 @@ class BaseClientTrainer:
         ClientTrainer class contains local data and local-specific information.
         After local training, upload weights to the Server.
         """
+
         # algorithm-specific parameters
         self.algo_params = algo_params
 

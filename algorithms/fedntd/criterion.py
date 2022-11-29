@@ -8,6 +8,8 @@ __all__ = ["NTD_Loss"]
 
 
 class NTD_Loss(nn.Module):
+    """Not-true Distillation Loss"""
+
     def __init__(self, num_classes=10, tau=3, beta=1):
         super(NTD_Loss, self).__init__()
         self.CE = nn.CrossEntropyLoss()
@@ -26,16 +28,17 @@ class NTD_Loss(nn.Module):
         return loss
 
     def _ntd_loss(self, logits, dg_logits, targets):
-        logits = refine_as_not_true(logits, targets, self.num_classes)
-        with torch.no_grad():
-            dg_logits = refine_as_not_true(dg_logits, targets, self.num_classes)
+        """Not-tue Distillation Loss"""
 
+        # Get smoothed local model prediction
+        logits = refine_as_not_true(logits, targets, self.num_classes)
         pred_probs = F.log_softmax(logits / self.tau, dim=1)
 
-        # Get smoothed dg_model prediction
+        # Get smoothed global model prediction
         with torch.no_grad():
+            dg_logits = refine_as_not_true(dg_logits, targets, self.num_classes)
             dg_probs = torch.softmax(dg_logits / self.tau, dim=1)
 
-        loss = self.KLDiv(pred_probs, dg_probs)
+        loss = (self.tau ** 2) * self.KLDiv(pred_probs, dg_probs)
 
         return loss

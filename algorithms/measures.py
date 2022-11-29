@@ -60,7 +60,7 @@ def evaluate_model_classwise(
 @torch.no_grad()
 def get_round_personalized_acc(round_results, server_results, data_distributed):
     """Evaluate personalized FL performance on the sampled clients."""
-    
+
     sampled_clients = server_results["client_history"][-1]
     local_dist_list, local_size_list = sampled_clients_identifier(
         data_distributed, sampled_clients

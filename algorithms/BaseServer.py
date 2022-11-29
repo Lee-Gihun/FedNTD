@@ -5,7 +5,6 @@ import copy
 import time
 import wandb
 
-
 from .measures import *
 
 __all__ = ["BaseServer"]
@@ -19,11 +18,10 @@ class BaseServer:
         data_distributed,
         optimizer,
         scheduler,
-        n_rounds=300,
+        n_rounds=200,
         sample_ratio=0.1,
         local_epochs=5,
-        device="cuda:1",
-        inline=False,
+        device="cuda:0",
     ):
         """
         Server class controls the overall experiment.
@@ -45,7 +43,6 @@ class BaseServer:
             "client_history": [],
             "test_accuracy": [],
         }
-        self.inline = inline
 
     def run(self):
         """Run the FL experiment"""
@@ -88,6 +85,8 @@ class BaseServer:
 
         # Client training stage
         for client_idx in sampled_clients:
+
+            # Fetch client datasets
             self._set_client_data(client_idx)
 
             # Download global
@@ -110,9 +109,9 @@ class BaseServer:
 
     def _client_sampling(self, round_idx):
         """Sample clients by given sampling ratio"""
-        np.random.seed(
-            round_idx
-        )  # make sure for same client sampling for fair comparison
+
+        # make sure for same client sampling for fair comparison
+        np.random.seed(round_idx)
         clients_per_round = max(int(self.n_clients * self.sample_ratio), 1)
         sampled_clients = np.random.choice(
             self.n_clients, clients_per_round, replace=False
@@ -121,6 +120,8 @@ class BaseServer:
         return sampled_clients
 
     # def _personalized_evaluation(self):
+    #    """Personalized FL performance evaluation for all clients."""
+
     #     finetune_results = {}
 
     #     server_weights = self.model.state_dict()
@@ -147,6 +148,7 @@ class BaseServer:
     #     return finetune_results
 
     def _set_client_data(self, client_idx):
+        """Assign local client datasets."""
         self.client.datasize = self.data_distributed["local"][client_idx]["datasize"]
         self.client.trainloader = self.data_distributed["local"][client_idx]["train"]
         self.client.testloader = self.data_distributed["global"]["test"]
@@ -220,27 +222,23 @@ class BaseServer:
 
         print("[Server Stat] Acc - {:2.2f}".format(test_accs))
 
-    def _wandb_logging(self, round_results, round_idx, inline=False):
+    def _wandb_logging(self, round_results, round_idx):
         """Log on the W&B server"""
 
-        if inline:
-            return
+        # Local round results
+        local_results = {
+            "local_train_acc": np.mean(round_results["train_acc"]),
+            "local_test_acc": np.mean(round_results["test_acc"]),
+        }
+        wandb.log(local_results, step=round_idx)
 
-        else:
-            # Local round results
-            local_results = {
-                "local_train_acc": np.mean(round_results["train_acc"]),
-                "local_test_acc": np.mean(round_results["test_acc"]),
-            }
-            wandb.log(local_results, step=round_idx)
-
-            # Server round results
-            server_results = {
-                "server_test_acc": self.server_results["test_accuracy"][-1]
-            }
-            wandb.log(server_results, step=round_idx)
+        # Server round results
+        server_results = {"server_test_acc": self.server_results["test_accuracy"][-1]}
+        wandb.log(server_results, step=round_idx)
 
     def _update_and_evaluate(self, ag_weights, round_results, round_idx, start_time):
+        """Evaluate experiment statistics."""
+
         # Update Global Server Model
         self.model.load_state_dict(ag_weights)
 
@@ -248,6 +246,7 @@ class BaseServer:
         test_acc = evaluate_model(self.model, self.testloader, device=self.device,)
         self.server_results["test_accuracy"].append(test_acc)
 
+        # Evaluate Personalized FL performance
         eval_results = get_round_personalized_acc(
             round_results, self.server_results, self.data_distributed
         )
@@ -259,6 +258,7 @@ class BaseServer:
 
         round_elapse = time.time() - start_time
 
-        self._wandb_logging(round_results, round_idx, self.inline)
+        # Log and Print
+        self._wandb_logging(round_results, round_idx)
         self._print_stats(round_results, test_acc, round_idx, round_elapse)
         print("-" * 50)

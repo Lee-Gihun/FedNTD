@@ -25,7 +25,7 @@ def sampled_clients_identifier(data_distributed, sampled_clients):
 
 def tensor_concater(tensor1, tensor2, device=None):
     """Concatenate two tensors"""
-    
+
     if tensor1 is None:
         tensor1 = tensor2
 
