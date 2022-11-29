@@ -1,26 +1,8 @@
-### Modified from https://github.com/pytorch/vision.git
 import math
 import torch.nn as nn
-import torch.nn.init as init
-
-__all__ = [
-    "VGG",
-    "vgg11",
-    "vgg11_bn",
-    "vgg13",
-    "vgg13_bn",
-    "vgg16",
-    "vgg16_bn",
-    "vgg19_bn",
-    "vgg19",
-]
 
 
 class VGG(nn.Module):
-    """
-    VGG model :[!Caution]: Unstable --- not aligned layer names (classifier)
-    """
-
     def __init__(
         self,
         features,
@@ -100,127 +82,14 @@ def make_layers(cfg, in_channels=3, batch_norm=False, img_size=3 * 32 * 32):
     return nn.Sequential(*layers)
 
 
-cfg = {
-    "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
-    "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
-    "D": [
-        64,
-        64,
-        "M",
-        128,
-        128,
-        "M",
-        256,
-        256,
-        256,
-        "M",
-        512,
-        512,
-        512,
-        "M",
-        512,
-        512,
-        512,
-        "M",
-    ],
-    "E": [
-        64,
-        64,
-        "M",
-        128,
-        128,
-        "M",
-        256,
-        256,
-        256,
-        256,
-        "M",
-        512,
-        512,
-        512,
-        512,
-        "M",
-        512,
-        512,
-        512,
-        512,
-        "M",
-    ],
-}
+cfg = {"vgg11": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"]}
 
 
-def vgg11(
-    use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10, use_bias=True
-):
+def vgg11(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
     return VGG(
-        make_layers(cfg["A"], in_channels=dim_in, img_size=img_size),
+        make_layers(cfg["vgg11"], in_channels=dim_in, img_size=img_size),
         use_dropout,
         512,
-        num_classes,
-        img_size,
-    )
-
-
-def vgg11_bn(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 11-layer model (configuration "A") with batch normalization"""
-    return VGG(
-        make_layers(cfg["A"], in_channels=dim_in, batch_norm=True),
-        use_dropout,
-        512,
-        num_classes,
-        img_size,
-    )
-
-
-def vgg13(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 13-layer model (configuration "B")"""
-    return VGG(make_layers(cfg["B"], in_channels=dim_in), 512, use_dropout, img_size)
-
-
-def vgg13_bn(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 13-layer model (configuration "B") with batch normalization"""
-    return VGG(
-        make_layers(cfg["B"], in_channels=dim_in, batch_norm=True),
-        use_dropout,
-        512,
-        num_classes,
-        img_size,
-    )
-
-
-def vgg16(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 16-layer model (configuration "D")"""
-    return VGG(make_layers(cfg["D"], in_channels=dim_in), 512, use_dropout, img_size)
-
-
-def vgg16_bn(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 16-layer model (configuration "D") with batch normalization"""
-    return VGG(
-        make_layers(cfg["D"], in_channels=dim_in, batch_norm=True),
-        512,
-        use_dropout,
-        num_classes,
-        img_size,
-    )
-
-
-def vgg19(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 19-layer model (configuration "E")"""
-    return VGG(
-        make_layers(cfg["E"], in_channels=dim_in),
-        use_dropout,
-        512,
-        num_classes,
-        img_size,
-    )
-
-
-def vgg19_bn(use_dropout=False, img_size=3 * 32 * 32, dim_in=3, num_classes=10):
-    """VGG 19-layer model (configuration 'E') with batch normalization"""
-    return VGG(
-        make_layers(cfg["E"], in_channels=dim_in, batch_norm=True),
-        512,
-        use_dropout,
         num_classes,
         img_size,
     )

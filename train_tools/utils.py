@@ -12,7 +12,6 @@ MODELS = {
 }
 
 NUM_CLASSES = {
-    "femnist": 62,
     "mnist": 10,
     "cifar10": 10,
     "cifar100": 100,
