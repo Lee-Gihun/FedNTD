@@ -52,6 +52,12 @@ class ClientTrainer(BaseClientTrainer):
 
         return local_results, local_size
 
+    def download_global(self, server_weights, server_optimizer, prev_weights):
+        """Load model & Optimizer"""
+        self.model.load_state_dict(server_weights)
+        self.optimizer.load_state_dict(server_optimizer)
+        self.prev_weights = prev_weights
+
     def _keep_prev_local(self):
         """Keep distributed global model's weight"""
         self.prev_model = copy.deepcopy(self.model)
