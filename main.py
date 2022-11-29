@@ -21,6 +21,7 @@ torch.set_printoptions(10)
 
 ALGO = {
     "fedavg": algorithms.fedavg.Server,
+    "fedcurv": algorithms.fedcurv.Server,
     "fedkd": algorithms.fedkd.Server,
     "fedprox": algorithms.fedprox.Server,
     "fedntd": algorithms.fedntd.Server,

@@ -1,4 +1,3 @@
-import numpy as np
 
 __all__ = ["detached_statedict"]
 
