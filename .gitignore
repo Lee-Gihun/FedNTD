@@ -1,0 +1,9 @@
+*.ipynb
+*.ipynb_checkpoints/
+__pycache__/
+wandb/
+data/
+/.vscode
+*.sh
+weights/
+nohup.out
