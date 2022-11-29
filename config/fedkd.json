@@ -7,19 +7,18 @@
         "partition": {
             "method": "sharding",
             "shard_per_user": 2
-        },
-        "cutout": false
+        }
     },
     "train_setups":{
         "algo": {
-            "name": "fedgsam",
+            "name": "fedkd",
             "params": {"tau": 3, "beta": 1}
         },
         "scenario": {
             "n_rounds": 200,
             "sample_ratio": 0.1,
             "local_epochs": 5,
-            "device": "cuda:1"
+            "device": "cuda:0"
         },
         "model":{
             "name": "fedavg_cifar",
@@ -33,15 +32,12 @@
             "name": "step",
             "params": {"gamma":0.99, "step_size": 1}
         },
-        "seed": 2021
+        "seed": 2022
     },
     "wandb_setups":{
-        "project": "FL",
-        "group": "paper",
-        "save_code": false,
-        "tags": [],
-        "name": "fedkd",
-        "notes": ""
+        "project": "NeurIPS2022",
+        "group": "fedkd",
+        "name": "fedkd"
     }
 }
 
