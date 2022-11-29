@@ -25,7 +25,7 @@ ALGO = {
     "fedprox": algorithms.fedprox.Server,
     "fedntd": algorithms.fedntd.Server,
     "scaffold": algorithms.scaffold.Server,
-    "feddyn": algorithms.feddyn.Server
+    "feddyn": algorithms.feddyn.Server,
 }
 
 SCHEDULER = {
@@ -37,7 +37,7 @@ SCHEDULER = {
 
 def _get_setups(args):
     """Get train configuration"""
-    
+
     # Fix randomness for data distribution
     np.random.seed(19940817)
     random.seed(19940817)
@@ -90,7 +90,7 @@ def main(args):
 
     # Load the configuration
     server = _get_setups(args)
-    
+
     # Conduct FL
     server.run()
 

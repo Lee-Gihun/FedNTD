@@ -57,6 +57,7 @@ def get_all_targets_cifar10(root, train=True):
     all_targets = dataset.targets
     return all_targets
 
+
 def get_dataloader_cifar10(root, train=True, batch_size=50, dataidxs=None):
     train_transform, valid_transform = _data_transforms_cifar10()
 
