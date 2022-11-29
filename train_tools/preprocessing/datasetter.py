@@ -88,10 +88,7 @@ def data_distributer(
     if net_dataidx_map_test is not None:
         for client_idx, dataidxs in net_dataidx_map_test.items():
             local_testloader = DATA_LOADERS[dataset_name](
-                root,
-                train=False,
-                batch_size=batch_size,
-                dataidxs=dataidxs,
+                root, train=False, batch_size=batch_size, dataidxs=dataidxs,
             )
             local_loaders[client_idx]["test"] = local_testloader
             local_loaders[client_idx]["dist"] = get_dist_vec(
@@ -99,9 +96,7 @@ def data_distributer(
             )
 
     global_loaders = {
-        "train": DATA_LOADERS[dataset_name](
-            root, train=True, batch_size=batch_size
-        ),
+        "train": DATA_LOADERS[dataset_name](root, train=True, batch_size=batch_size),
         "test": DATA_LOADERS[dataset_name](root, train=False, batch_size=batch_size),
     }
 

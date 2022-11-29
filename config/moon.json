@@ -11,8 +11,8 @@
     },
     "train_setups":{
         "algo": {
-            "name": "fedkd",
-            "params": {"tau": 1, "beta": 1}
+            "name": "moon",
+            "params": {}
         },
         "scenario": {
             "n_rounds": 200,
@@ -36,8 +36,7 @@
     },
     "wandb_setups":{
         "project": "NeurIPS2022",
-        "group": "fedkd",
-        "name": "fedkd"
+        "group": "moon",
+        "name": "moon"
     }
 }
-

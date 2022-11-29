@@ -24,9 +24,12 @@ class ClientTrainer(BaseClientTrainer):
 
         # Boolean variable which allows scaffold-like Cross-Client Variance Reduction
         self.nova_ccvr = self.algo_params.nova_ccvr
-        
+
     def train(self):
         """Local training"""
+
+        # Keep global model weights
+        self._keep_global()
 
         self.model.train()
         self.model.to(self.device)
@@ -43,8 +46,7 @@ class ClientTrainer(BaseClientTrainer):
         local_results = self._get_local_stats()
 
         return local_results, local_size, aidi
-    
-    
+
     def download_global(self, server_weights, server_optimizer, weighted_d, d_i):
         """Load model & Optimizer"""
         self.model.load_state_dict(server_weights)
@@ -52,7 +54,6 @@ class ClientTrainer(BaseClientTrainer):
         self.weighted_d, self.d_i = weighted_d.to(self.device), d_i.to(self.device)
         self.c_i = self.weighted_d - self.d_i
 
-    
     def _nova_step(self, data, targets):
         self.optimizer.zero_grad()
 
@@ -86,3 +87,7 @@ class ClientTrainer(BaseClientTrainer):
         aidi = torch.from_numpy(param_move / local_lr)
 
         return aidi.detach().clone()
+
+    def __get_learning_rate(self):
+        for param_group in self.optimizer.param_groups:
+            return param_group["lr"]

@@ -18,7 +18,7 @@ class ClientTrainer(BaseClientTrainer):
         ClientTrainer class contains local data and local-specific information.
         After local training, upload weights to the Server.
         """
-        
+
         # Fisher regularization setting
         self.fisher_sample_size = self.algo_params.size
         self.fisher_lambda = self.algo_params.lam
@@ -26,8 +26,7 @@ class ClientTrainer(BaseClientTrainer):
         # Parameters for Fisher regularization
         self.enable_fisher_reg = False
         self.Pt, self.Qt = None, None
-        
-        
+
     def train(self):
         """Local training"""
 
@@ -64,8 +63,7 @@ class ClientTrainer(BaseClientTrainer):
         local_results = self._get_local_stats()
 
         return local_results, local_size
-    
-    
+
     def download_fisher_regularizer(self, Pt, Qt):
         """Download regularizer coefficient from server"""
         self.enable_fisher_reg = True
@@ -106,14 +104,13 @@ class ClientTrainer(BaseClientTrainer):
 
         return ut, vt
 
-    
     def reset(self):
         """Clean existing setups"""
         self.datasize = None
         self.trainloader = None
         self.testloader = None
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=0)
-        
+
         # Set boolen token for enabling Fisher regularizer as false
         # Set Pt and Qt as None
         self.enable_fisher_reg = False

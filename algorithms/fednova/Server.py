@@ -31,13 +31,12 @@ class Server(BaseServer):
             device=self.device,
             num_classes=self.num_classes,
         )
-        
+
         self.local_a = self._init_nova_dependencies()
         self.weighted_d, self.local_d = self._init_control_variates()
 
         print("\n>>> FedNova Server initialized...\n")
-        
-        
+
     def run(self):
         """Run the FL experiment"""
         self._print_start()
@@ -56,7 +55,7 @@ class Server(BaseServer):
             # Make local sets to distributed to clients
             sampled_clients = self._client_sampling(round_idx)
             self.server_results["client_history"].append(sampled_clients)
-            
+
             # (Distributed) global weights
             dg_weights = copy.deepcopy(self.model.state_dict())
 
@@ -72,7 +71,6 @@ class Server(BaseServer):
 
             # Update global weights and evaluate statistics
             self._update_and_evaluate(ag_weights, round_results, round_idx, start_time)
-
 
     def _clients_training(self, sampled_clients):
         """Conduct local training and get trained local models' weights"""
@@ -103,7 +101,7 @@ class Server(BaseServer):
             # Upload locals
             updated_local_weights[client_idx] = self.client.upload_local()
             self.local_d[client_idx] = aidi / self.local_a[client_idx]
-            
+
             # Update results
             round_results = self._results_updater(round_results, local_results)
             client_sizes[client_idx] = local_size
@@ -112,7 +110,6 @@ class Server(BaseServer):
             self.client.reset()
 
         return updated_local_weights, client_sizes, round_results
-
 
     @torch.no_grad()
     def _nova_aggregation(self, dg_weights, local_weights, client_sizes):
@@ -162,7 +159,7 @@ class Server(BaseServer):
         for i in sampled_clients:
             dsize = self.data_distributed["local"][i]["datasize"]
             self.weighted_d += (dsize / total_size) * self.local_d[i]
-            
+
     def __get_learning_rate(self):
         for param_group in self.optimizer.param_groups:
             return param_group["lr"]
@@ -170,7 +167,7 @@ class Server(BaseServer):
     def __get_momentum(self):
         for param_group in self.optimizer.param_groups:
             return param_group["momentum"]
-            
+
     def _init_nova_dependencies(self):
         tau_i, a_i = {}, {}
         rho = self.__get_momentum()

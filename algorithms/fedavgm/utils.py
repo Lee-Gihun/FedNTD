@@ -68,5 +68,5 @@ def assign_weights(model, weights):
             )
             index += param_count
     model.load_state_dict(state_dict)
-    
+
     return model

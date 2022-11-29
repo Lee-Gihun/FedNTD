@@ -18,7 +18,7 @@ def flatten_weights(model, numpy_output=True):
     all_params = torch.cat(all_params)
     if numpy_output:
         return all_params.cpu().detach().numpy()
-    
+
     return all_params
 
 
@@ -31,7 +31,7 @@ def flatten_grads(model):
     all_grads = []
     for name, param in model.named_parameters():
         all_grads.append(param.grad.view(-1))
-        
+
     return torch.cat(all_grads)
 
 
@@ -66,7 +66,7 @@ def assign_weights(model, weights):
             )
             index += param_count
     model.load_state_dict(state_dict)
-    
+
     return model
 
 
@@ -94,5 +94,5 @@ def assign_grads(model, grads):
         )
         index += param_count
     model.load_state_dict(state_dict)
-    
+
     return model

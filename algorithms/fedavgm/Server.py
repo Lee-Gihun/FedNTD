@@ -31,14 +31,14 @@ class Server(BaseServer):
             device=self.device,
             num_classes=self.num_classes,
         )
-        
+
         m_weights = copy.deepcopy(self.model)
         self.m_flat = flatten_weights(m_weights)
         self.m_flat = np.zeros_like(self.m_flat)
         self.avgm_beta = algo_params.avgm_beta
 
         print("\n>>> FedAvgM Server initialized...\n")
-        
+
     def run(self):
         """Run the FL experiment"""
         self._print_start()
@@ -53,7 +53,7 @@ class Server(BaseServer):
                 self.server_results["test_accuracy"].append(test_acc)
 
             start_time = time.time()
-            
+
             # Make local sets to distributed to clients
             sampled_clients = self._client_sampling(round_idx)
             self.server_results["client_history"].append(sampled_clients)
@@ -65,7 +65,7 @@ class Server(BaseServer):
             updated_local_weights, client_sizes, round_results = self._clients_training(
                 sampled_clients
             )
-            
+
             # Get aggregated weights & update global (with server momemtum)
             new_weights = self._aggregation(updated_local_weights, client_sizes)
 
