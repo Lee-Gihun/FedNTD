@@ -76,4 +76,4 @@ def get_dataloader_cifar100(root, train=True, batch_size=50, dataidxs=None):
             dataset=dataset, batch_size=batch_size, shuffle=False, num_workers=5
         )
 
-    return
+    return dataloader
